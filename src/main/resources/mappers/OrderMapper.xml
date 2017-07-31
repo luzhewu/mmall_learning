@@ -173,7 +173,7 @@
         close_time = #{closeTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null" >
-        create_time = now(),
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
         update_time = now(),
@@ -194,7 +194,7 @@
       send_time = #{sendTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       close_time = #{closeTime,jdbcType=TIMESTAMP},
-      create_time = now(),
+      create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = now()
     where id = #{id,jdbcType=INTEGER}
   </update>

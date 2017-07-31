@@ -18,7 +18,7 @@
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, category_id, name, subtitle, main_image, sub_images, detail, price, stock, status, 
+    id, category_id, name, subtitle, main_image, sub_images, detail, price, stock, status,
     create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -153,7 +153,7 @@
         status = #{status,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
-        create_time = now(),
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
         update_time = now(),
@@ -172,8 +172,46 @@
       price = #{price,jdbcType=DECIMAL},
       stock = #{stock,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
-      create_time = now(),
+      create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = now()
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    form mmall_product
+    order by id
+  </select>
+
+  <select id="selectByNameAndProductId" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List"/>
+    form mmall_product
+    <where>
+      <if test="productName != null">
+        and productName like {productName}
+      </if>
+      <if test="productId != null">
+        and productId = {productId}
+      </if>
+    </where>
+    order by id
+  </select>
+
+  <select id="selectByNameCategoryIds" resultMap="BaseResultMap" parameterType="map">
+    select
+    <include refid="Base_Column_List"/>
+    FROM  mmall_product
+    where status = 1
+    <if test="productName != null">
+      and name like #{productName}
+    </if>
+    <if test="categoryIdList != null">
+      and categoryId in
+      <foreach collection="categoryIdList" item="item" index="index" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+  </select>
 </mapper>
